@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yes! 💕</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #ffe6f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c41e5a;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 182, 193, 0.8);
+        }
+
+        .image-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #thumbImg {
+            width: 180px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(196, 30, 90, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            #result { font-size: 28px; }
+            #thumbImg { width: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks"></canvas>
+
+    <div class="content">
+        <div id="result">Best decision! 💕</div>
+        <div class="image-wrap">
+            <img id="thumbImg" src="" alt="Thumbs Up">
+        </div>
+        <br>
+<div id="result">
+    Love You Carino!
+</div>
+    </div>
+
+    <script>
+        const thumbImg = document.getElementById("thumbImg");
+        thumbImg.src = new URL("friends-joey.gif", window.location.href).href;
+
+        // Fireworks canvas
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        let w, h;
+        const particles = [];
+        const bursts = [];
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+
+        const colors = ["#ff6b9d", "#c41e5a", "#ffb6c1", "#ff69b4", "#ff1493", "#ffc0cb", "#fff0f5", "#ff85a2"];
+
+        class Particle {
+            constructor(x, y, color, angle, speed, decay = 0.98) {
+                this.x = x;
+                this.y = y;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.color = color;
+                this.alpha = 1;
+                this.decay = decay;
+                this.gravity = 0.02;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.vx *= this.decay;
+                this.vy *= this.decay;
+                this.alpha -= 0.012;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createBurst(x, y) {
+            const count = 60 + Math.floor(Math.random() * 40);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count + Math.random();
+                const speed = 2 + Math.random() * 4;
+                particles.push(new Particle(x, y, color, angle, speed));
+            }
+        }
+
+        function spawnFirework() {
+            const x = Math.random() * w;
+            const y = h * (0.2 + Math.random() * 0.5);
+            createBurst(x, y);
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, w, h);
+            if (Math.random() < 0.04) spawnFirework();
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(loop);
+        }
+
+        window.addEventListener("resize", resize);
+        resize();
+        // Initial bursts beside center
+        setTimeout(() => createBurst(w * 0.3, h * 0.4), 100);
+        setTimeout(() => createBurst(w * 0.7, h * 0.5), 300);
+        setTimeout(() => createBurst(w * 0.5, h * 0.35), 500);
+        loop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Be My Valentine 💘</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #ffe6f0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            padding: 0 20px;
+            font-size: 22px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .buttons {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 12px 22px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #yesBtn {
+            background: #28a745;
+            color: white;
+        }
+
+        #noBtn {
+            background: #dc3545;
+            color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+        img {
+            width: 150px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Will you be my Valentine Shivani? 💖</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+
+    <div id="result"></div>
+    <img id="thumbImg" src="" alt="Thumbs Up">
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const thumbImg = document.getElementById("thumbImg");
+
+        // Dynamic gif path: same folder as this HTML (works locally and when deployed)
+        thumbImg.src = new URL("friends-joey.gif", window.location.href).href;
+
+        function moveNoButton() {
+            noBtn.style.position = "fixed";
+            const maxX = window.innerWidth - 100;
+            const maxY = window.innerHeight - 100;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.left = randomX + "px";
+            noBtn.style.top = randomY + "px";
+        }
+
+        // For desktop hover
+        noBtn.addEventListener("mouseover", moveNoButton);
+
+        // For mobile touch
+        noBtn.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        yesBtn.addEventListener("click", function() {
+            window.location.href = new URL("success.html", window.location.href).href;
+        });
+    </script>
+
+</body>
+</html>
